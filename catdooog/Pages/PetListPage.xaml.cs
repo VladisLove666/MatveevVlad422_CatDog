@@ -1,4 +1,5 @@
-﻿using System;
+﻿using catdooog.BD;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,50 @@ namespace catdooog.Pages
     /// </summary>
     public partial class PetListPage : Page
     {
-        public PetListPage()
+        private User currentUser;
+
+        public PetListPage(User user)
         {
             InitializeComponent();
+            currentUser = user;
+            LoadPets();
+        }
+
+        private void LoadPets()
+        {
+            var pets = App.db.Pets.Where(p => p.UserId == currentUser.Id).ToList();
+            PetsListView.ItemsSource = pets;
+        }
+
+        private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SortComboBox.SelectedItem is ComboBoxItem selectedItem)
+            {
+                if (selectedItem.Content.ToString() == "По имени")
+                {
+                    PetsListView.ItemsSource = App.db.Pets.Where(p => p.UserId == currentUser.Id).OrderBy(p => p.Name).ToList();
+                }
+                else if (selectedItem.Content.ToString() == "По описанию")
+                {
+                    PetsListView.ItemsSource = App.db.Pets.Where(p => p.UserId == currentUser.Id).OrderBy(p => p.Description).ToList();
+                }
+            }
+        }
+
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = SearchTextBox.Text.ToLower();
+            var filteredPets = App.db.Pets
+                .Where(p => p.UserId == currentUser.Id &&
+                            (p.Name.ToLower().Contains(searchText) || p.Description.ToLower().Contains(searchText)))
+                .ToList();
+            PetsListView.ItemsSource = filteredPets;
+        }
+
+        private void AddPetButton_Click(object sender, RoutedEventArgs e)
+        {
+            var addPetPage = new AddPetPage(currentUser);
+            addPetPage.Show();
         }
     }
 }
