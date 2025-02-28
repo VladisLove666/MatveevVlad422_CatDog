@@ -25,7 +25,7 @@ namespace catdooog
         {
             InitializeComponent();
             App.main = this;
-            myframe.NavigationService.Navigate(new Pages.ProductList());
+            myframe.NavigationService.Navigate(new Pages.AuthorizationPage());
         }
     }
 }

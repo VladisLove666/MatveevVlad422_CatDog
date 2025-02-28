@@ -16,13 +16,14 @@ using System.Windows.Shapes;
 namespace catdooog.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для Entrance.xaml
+    /// Логика взаимодействия для AuthorizationPage.xaml
     /// </summary>
-    public partial class Entrance : Page
+    public partial class AuthorizationPage : Page
     {
-        public Entrance()
+        public AuthorizationPage()
         {
             InitializeComponent();
         }
+
     }
 }

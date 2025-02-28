@@ -14,5 +14,6 @@ namespace catdooog
     public partial class App : Application
     {
         public static MainWindow main;
+
     }
 }
