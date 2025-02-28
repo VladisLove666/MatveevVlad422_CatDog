@@ -1,4 +1,5 @@
-﻿using System;
+﻿using catdooog.BD;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,7 +14,7 @@ namespace catdooog
     /// </summary>
     public partial class App : Application
     {
+        public static catdogEntities db = new catdogEntities();
         public static MainWindow main;
-
     }
 }
