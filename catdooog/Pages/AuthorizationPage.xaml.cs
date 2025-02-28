@@ -26,7 +26,20 @@ namespace catdooog.Pages
         }
         private void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
+            string username = UsernameTextBox.Text;
 
+            var user = App.db.Users.FirstOrDefault(u => u.Username == username);
+
+            if (user != null)
+            {
+                var petListPage = new PetListPage(user);
+                petListPage.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Неверное имя пользователя.");
+            }
         }
     }
 }
