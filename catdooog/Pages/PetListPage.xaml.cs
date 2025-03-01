@@ -21,9 +21,9 @@ namespace catdooog.Pages
     /// </summary>
     public partial class PetListPage : Page
     {
-        private User currentUser;
+        private Users currentUser;
 
-        public PetListPage(User user)
+        public PetListPage(Users user)
         {
             InitializeComponent();
             currentUser = user;
@@ -64,7 +64,7 @@ namespace catdooog.Pages
         private void AddPetButton_Click(object sender, RoutedEventArgs e)
         {
             var addPetPage = new AddPetPage(currentUser);
-            addPetPage.Show();
+            NavigationService.Navigate(addPetPage);
         }
     }
 }

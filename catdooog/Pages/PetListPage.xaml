@@ -20,8 +20,6 @@
         <ListView x:Name="PetsListView" Margin="0,70,0,0">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Имя" Width="120" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Описание" Width="300" DisplayMemberBinding="{Binding Description}" />
                     <GridViewColumn Header="Изображение" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -29,6 +27,8 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    <GridViewColumn Header="Имя" Width="120" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Описание" Width="300" DisplayMemberBinding="{Binding Description}" />
                 </GridView>
             </ListView.View>
         </ListView>

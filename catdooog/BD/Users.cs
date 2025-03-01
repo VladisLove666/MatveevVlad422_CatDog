@@ -12,7 +12,7 @@ namespace catdooog.BD
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public class Users
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Users()

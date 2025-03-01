@@ -23,11 +23,10 @@ namespace catdooog.Pages
     /// </summary>
     public partial class AddPetPage : Page
     {
-        private User currentUser;
+        private Users currentUser;
         private string imagePath;
-        private Pet currentPet;
 
-        public AddPetPage(User user)
+        public AddPetPage(Users user)
         {
             InitializeComponent();
             currentUser = user;
@@ -56,16 +55,20 @@ namespace catdooog.Pages
 
             if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(description) && !string.IsNullOrEmpty(imagePath))
             {
-                var pet = new Pet
+                var pet = new Pets
                 {
                     Name = name,
                     Description = description,
-                    ImagePath = imagePath
+                    ImagePath = imagePath,
+                    UserId = currentUser.Id
                 };
 
                 App.db.Pets.Add(pet);
                 App.db.SaveChanges();
                 MessageBox.Show("Питомец добавлен!");
+                var petListPage = new PetListPage(currentUser);
+                NavigationService.Navigate(petListPage);
+
             }
             else
             {

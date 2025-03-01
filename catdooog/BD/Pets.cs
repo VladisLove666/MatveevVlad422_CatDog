@@ -12,7 +12,7 @@ namespace catdooog.BD
     using System;
     using System.Collections.Generic;
     
-    public partial class Pets
+    public class Pets
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -87,14 +87,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
-    <Compile Include="BD\Pet.cs" />
     <Compile Include="BD\Pets.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="BD\sysdiagrams.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="BD\User.cs" />
     <Compile Include="BD\Users.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
