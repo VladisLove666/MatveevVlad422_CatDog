@@ -16,7 +16,7 @@
             <TextBox x:Name="DescriptionTextBox" Width="200" Height="30" Margin="10"/>
             <TextBlock x:Name="ImagePathTextBlock" TextWrapping="Wrap" />
             <Button x:Name="SelectImageButton" Content="Выбрать изображение" Click="SelectImageButton_Click" Width="200" Height="30"/>
-            <Button x:Name="AddBtn" Content="Добавить" Click="AddBtn_Click" Width="200" Height="30" Margin="10"/> 
+            <Button x:Name="AddBtn" Content="Добавить" Click="AddBtn_Click" Width="200" Height="30" Margin="10"/>
         </StackPanel>
     </Grid>
 </Page>

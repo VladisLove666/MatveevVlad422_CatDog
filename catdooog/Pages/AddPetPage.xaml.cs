@@ -50,7 +50,7 @@ namespace catdooog.Pages
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            string name = NameTextBox.Text; 
+            string name = NameTextBox.Text;
             string description = DescriptionTextBox.Text;
 
             if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(description) && !string.IsNullOrEmpty(imagePath))
