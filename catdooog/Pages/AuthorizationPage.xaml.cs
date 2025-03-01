@@ -37,7 +37,7 @@ namespace catdooog.Pages
             }
             else
             {
-                MessageBox.Show("Неверное имя пользователя.");
+                MessageBox.Show("Неверное имя пользователя."); 
             }
         }
     }

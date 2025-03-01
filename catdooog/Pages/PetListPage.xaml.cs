@@ -51,7 +51,7 @@ namespace catdooog.Pages
             }
         }
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e) 
         {
             string searchText = SearchTextBox.Text.ToLower();
             var filteredPets = App.db.Pets

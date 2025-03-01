@@ -22,7 +22,7 @@
                 <GridView>
                     <GridViewColumn Header="Изображение" Width="100">
                         <GridViewColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataTemplate> 
                                 <Image Source="{Binding ImagePath}" Width="50" Height="50" Stretch="Uniform" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
