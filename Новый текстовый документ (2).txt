@@ -1,0 +1,374 @@
+CREATE TABLE Participants (
+    ParticipantID INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(100),
+    Nickname NVARCHAR(50),
+    ContactInfo NVARCHAR(100),
+    Game NVARCHAR(50),
+    Role NVARCHAR(50),
+    MatchesPlayed INT,
+    Wins INT,
+    Losses INT,
+    SkillLevel INT
+);
+
+CREATE TABLE Tournaments (
+    TournamentID INT PRIMARY KEY IDENTITY,
+    Title NVARCHAR(100),
+    Game NVARCHAR(50),
+    Format NVARCHAR(50),
+    StartDate DATETIME,
+    PrizePool DECIMAL(18, 2),
+    ParticipantCount INT,
+    Status NVARCHAR(50)
+);
+
+CREATE TABLE Matches (
+    MatchID INT PRIMARY KEY IDENTITY,
+    TournamentID INT FOREIGN KEY REFERENCES Tournaments(TournamentID),
+    Participants NVARCHAR(200),
+    StartDate DATETIME,
+    Result NVARCHAR(100),
+    Duration INT
+);
+
+CREATE TABLE Organizers (
+    OrganizerID INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(100),
+    ContactInfo NVARCHAR(100),
+    Username NVARCHAR(50),
+    Password NVARCHAR(50),
+    AccessLevel NVARCHAR(50)
+);
+
+CREATE TABLE Spectators (
+    SpectatorID INT PRIMARY KEY IDENTITY,
+    Username NVARCHAR(50),
+    ViewedTournaments NVARCHAR(MAX),
+    FavoriteTournaments NVARCHAR(MAX)
+);
+
+CREATE TABLE Statistics (
+    TournamentTitle NVARCHAR(100),
+    FinalPositions NVARCHAR(MAX),
+    MatchesCount INT,
+    TotalDuration INT,
+    BestPlayer NVARCHAR(100)
+);
+
+INSERT INTO Participants (Name, Nickname, ContactInfo, Game, Role, MatchesPlayed, Wins, Losses, SkillLevel)
+VALUES 
+('Иван Иванов', 'Ivan', 'ivan@example.com', 'Dota 2', 'Капитан', 10, 5, 5, 3),
+('Петр Петров', 'Petya', 'petya@example.com', 'CS:GO', 'Стрелок', 15, 8, 7, 4),
+('Сергей Сергеев', 'Sergio', 'sergio@example.com', 'League of Legends', 'Танк', 20, 12, 8, 5);
+
+-- Заполнение таблицы Tournaments
+INSERT INTO Tournaments (Title, Game, Format, StartDate, PrizePool, ParticipantCount, Status)
+VALUES 
+('Турнир по Dota 2', 'Dota 2', 'Командный', '2023-11-01', 1000.00, 8, 'Ожидание'),
+('Турнир по CS:GO', 'CS:GO', 'Одиночный', '2023-12-01', 500.00, 16, 'Ожидание');
+
+-- Заполнение таблицы Matches
+INSERT INTO Matches (TournamentID, Participants, StartDate, Result, Duration)
+VALUES 
+(1, 'Иван Иванов, Петр Петров', '2023-11-01 10:00:00', 'Иван Иванов победил', 30),
+(2, 'Сергей Сергеев, Петр Петров', '2023-12-01 15:00:00', 'Петр Петров победил', 25);
+
+-- Заполнение таблицы Organizers
+INSERT INTO Organizers (Name, ContactInfo, Username, Password, AccessLevel)
+VALUES 
+('Алексей Орлов', 'alexey@example.com', 'alexey', 'password123', 'Администратор');
+
+-- Заполнение таблицы Spectators
+INSERT INTO Spectators (Username, ViewedTournaments, FavoriteTournaments)
+VALUES 
+('spectator1', 'Турнир по Dota 2', 'Турнир по CS:GO');
+
+-- Заполнение таблицы Statistics
+INSERT INTO Statistics (TournamentTitle, FinalPositions, MatchesCount, TotalDuration, BestPlayer)
+VALUES 
+('Турнир по Dota 2', '1. Иван Иванов, 2. Петр Петров', 4, 120, 'Иван Иванов');
+
+    <Grid>
+        <Frame NavigationUIVisibility="Hidden" x:Name="myframe"></Frame>
+    </Grid>
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            App.main = this;    
+            myframe.NavigationService.Navigate(new Pages.ProductList());
+
+
+        }
+
+public partial class App : Application
+{
+    public static TournamentEntities db = new TournamentEntities();
+}
+
+        <StackPanel>
+            <TextBlock Text="Добро пожаловать на Онлайн-турнирную платформу" 
+                       FontSize="24" FontWeight="Bold" 
+                       HorizontalAlignment="Center" Margin="10"/>
+            <Button Content="Участники" Width="200" Height="50" 
+                    Margin="10" Click="ParticipantsButton_Click"/>
+            <Button Content="Организаторы" Width="200" Height="50" 
+                    Margin="10" Click="OrganizersButton_Click"/>
+            <Button Content="Зрители" Width="200" Height="50" 
+                    Margin="10" Click="SpectatorsButton_Click"/>
+            <Button Content="Статистика" Width="200" Height="50" 
+                    Margin="10" Click="StatisticsButton_Click"/>
+            <Button Content="Матчи" Width="200" Height="50" 
+                    Margin="10" Click="MatchesButton_Click"/>
+        </StackPanel>
+
+        private void ParticipantsButton_Click(object sender, RoutedEventArgs e)
+        {
+            myframe.Navigate(new Pages.ParticipantPage());
+        }
+
+        private void OrganizersButton_Click(object sender, RoutedEventArgs e)
+        {
+            myframe.Navigate(new Pages.OrganizerPage());
+        }
+
+        private void SpectatorsButton_Click(object sender, RoutedEventArgs e)
+        {
+            myframe.Navigate(new Pages.SpectatorPage());
+        }
+
+        private void StatisticsButton_Click(object sender, RoutedEventArgs e)
+        {
+            myframe.Navigate(new Pages.StatisticsPage());
+        }
+
+        private void MatchesButton_Click(object sender, RoutedEventArgs e)
+        {
+            myframe.Navigate(new Pages.MatchesPage());
+        }
+
+
+
+
+
+        <StackPanel Margin="20">
+            <TextBlock Text="Просмотр турниров" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+            <DataGrid x:Name="TournamentsDataGrid" AutoGenerateColumns="False" Margin="0,20,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Название" Binding="{Binding Title}"/>
+                    <DataGridTextColumn Header="Игра" Binding="{Binding Game}"/>
+                    <DataGridTextColumn Header="Дата" Binding="{Binding StartDate}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+public SpectatorPage()
+        {
+            InitializeComponent();
+            LoadTournaments();
+        }
+
+        private void LoadTournaments()
+        {
+            TournamentsDataGrid.ItemsSource = App.db.Tournaments.ToList();
+        }
+
+
+
+
+
+        <StackPanel Margin="20">
+            <TextBlock Text="Создание турнира" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBox x:Name="TournamentTitleTextBox" Text="Название турнира" Margin="0,0,0,10"/>
+            <ComboBox x:Name="GameComboBox" Margin="0,0,0,10">
+                <ComboBoxItem Content="Dota 2"/>
+                <ComboBoxItem Content="CS:GO"/>
+            </ComboBox>
+            <DatePicker x:Name="StartDatePicker" Margin="0,0,0,10"/>
+            <TextBox x:Name="PrizePoolTextBox" Text="Призовой фонд" Margin="0,0,0,10"/>
+            <Button Content="Создать турнир" Width="200" Height="50" 
+                    Click="CreateTournamentButton_Click"/>
+            <DataGrid x:Name="TournamentsDataGrid" AutoGenerateColumns="False" Margin="0,20,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Название" Binding="{Binding Title}"/>
+                    <DataGridTextColumn Header="Игра" Binding="{Binding Game}"/>
+                    <DataGridTextColumn Header="Дата" Binding="{Binding StartDate}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+public OrganizerPage()
+        {
+            InitializeComponent();
+            LoadTournaments();
+        }
+
+        private void LoadTournaments()
+        {
+            TournamentsDataGrid.ItemsSource = App.db.Tournaments.ToList();
+        }
+
+        private void CreateTournamentButton_Click(object sender, RoutedEventArgs e)
+        {
+            string title = TournamentTitleTextBox.Text;
+            string selectedGame = (GameComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+            DateTime startDate = StartDatePicker.SelectedDate ?? DateTime.Now;
+            decimal prizePool;
+
+            if (!decimal.TryParse(PrizePoolTextBox.Text, out prizePool))
+            {
+                MessageBox.Show("Введите корректный призовой фонд.");
+                return;
+            }
+            Tournament newTournament = new Tournament
+            {
+                Title = title,
+                Game = selectedGame,
+                StartDate = startDate,
+                PrizePool = prizePool,
+                ParticipantCount = 0,
+                Status = "Ожидание"
+            };
+
+            App.db.Tournaments.Add(newTournament);
+            App.db.SaveChanges();
+            LoadTournaments();
+        }
+
+
+
+
+
+
+
+<StackPanel Margin="20">
+            <TextBlock Text="Регистрация участников" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+            
+            <TextBox x:Name="NameTextBox" PlaceholderText="Имя игрока/команды" Margin="0,0,0,10"/>
+            <TextBox x:Name="NicknameTextBox" PlaceholderText="Никнейм" Margin="0,0,0,10"/>
+            <TextBox x:Name="ContactTextBox" PlaceholderText="Контактные данные" Margin="0,0,0,10"/>
+            
+            <ComboBox x:Name="GameComboBox" Margin="0,0,0,10">
+                <ComboBoxItem Content="Dota 2"/>
+                <ComboBoxItem Content="CS:GO"/>
+                <ComboBoxItem Content="League of Legends"/>
+                <ComboBoxItem Content="Valorant"/>
+                <ComboBoxItem Content="Fortnite"/>
+            </ComboBox>
+            
+            <ComboBox x:Name="RoleComboBox" Margin="0,0,0,10">
+                <ComboBoxItem Content="Капитан"/>
+                <ComboBoxItem Content="Стрелок"/>
+                <ComboBoxItem Content="Танк"/>
+            </ComboBox>
+            
+            <Button Content="Зарегистрироваться" Width="200" Height="50" 
+                    Click="RegisterButton_Click"/>
+            
+            <DataGrid x:Name="ParticipantsDataGrid" AutoGenerateColumns="False" Margin="0,20,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Никнейм" Binding="{Binding Nickname}"/>
+                    <DataGridTextColumn Header="Контактные данные" Binding="{Binding ContactInfo}"/>
+                    <DataGridTextColumn Header="Игра" Binding="{Binding Game}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+
+        public ParticipantPage()
+        {
+            InitializeComponent();
+            LoadParticipants();
+        }
+
+        private void LoadParticipants()
+        {
+            ParticipantsDataGrid.ItemsSource = App.db.Participants.ToList();
+        }
+
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            string name = NameTextBox.Text;
+            string nickname = NicknameTextBox.Text;
+            string contactInfo = ContactTextBox.Text;
+            string selectedGame = (GameComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string selectedRole = (RoleComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            Participant newParticipant = new Participant
+            {
+                Name = name,
+                Nickname = nickname,
+                ContactInfo = contactInfo,
+                Game = selectedGame,
+                Role = selectedRole,
+                MatchesPlayed = 0,
+                Wins = 0,
+                Losses = 0,
+                SkillLevel = 0
+            };
+
+            App.db.Participants.Add(newParticipant);
+            App.db.SaveChanges();
+
+            LoadParticipants();
+        }
+    }
+
+
+
+<StackPanel Margin="20">
+        <TextBlock Text="Статистика турниров" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+        <DataGrid x:Name="StatisticsDataGrid" AutoGenerateColumns="False" Margin="0,20,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название турнира" Binding="{Binding TournamentTitle}"/>
+                <DataGridTextColumn Header="Финальные позиции" Binding="{Binding FinalPositions}"/>
+                <DataGridTextColumn Header="Количество матчей" Binding="{Binding MatchesCount}"/>
+                <DataGridTextColumn Header="Общая продолжительность" Binding="{Binding TotalDuration}"/>
+                <DataGridTextColumn Header="Лучший игрок" Binding="{Binding BestPlayer}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+
+public StatisticsPage()
+        {
+            InitializeComponent();
+            LoadStatistics();
+        }
+
+        private void LoadStatistics()
+        {
+            StatisticsDataGrid.ItemsSource = App.db.Statistics.ToList();
+        }
+
+
+<StackPanel Margin="20">
+        <TextBlock Text="Матчи" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+        <DataGrid x:Name="MatchesDataGrid" AutoGenerateColumns="False" Margin="0,20,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Турнир" Binding="{Binding TournamentID}"/>
+                <DataGridTextColumn Header="Участники" Binding="{Binding Participants}"/>
+                <DataGridTextColumn Header="Дата начала" Binding="{Binding StartDate}"/>
+                <DataGridTextColumn Header="Результат" Binding="{Binding Result}"/>
+                <DataGridTextColumn Header="Продолжительность" Binding="{Binding Duration}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+
+        public MatchesPage()
+        {
+            InitializeComponent();
+            LoadMatches();
+        }
+
+        private void LoadMatches()
+        {
+            MatchesDataGrid.ItemsSource = App.db.Matches.ToList();
+        }
+
+
+    public partial class App : Application
+    {
+        public static TournamentEntities db = new TournamentEntities();
+    }
